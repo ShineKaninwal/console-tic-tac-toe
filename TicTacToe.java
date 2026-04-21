@@ -49,11 +49,20 @@ public class TicTacToe {
         // =========================
         // UC3: User Input
         // =========================
-        int userSlot = getUserInput();
-        System.out.println("You selected slot: " + userSlot);
+        int slot = getUserInput();
+
+        // =========================
+        // UC4: Convert Slot → Index
+        // =========================
+        int[] position = convertSlotToIndex(slot);
+
+        int row = position[0];
+        int col = position[1];
+
+        System.out.println("Row: " + row + ", Column: " + col);
     }
 
-    // Method to print board
+    // Print Board
     public static void printBoard(char[][] board) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -63,7 +72,7 @@ public class TicTacToe {
         }
     }
 
-    // Method to get user input (1–9)
+    // UC3: Get User Input
     public static int getUserInput() {
         int slot;
 
@@ -77,5 +86,14 @@ public class TicTacToe {
                 System.out.println("Invalid input! Please enter between 1 and 9.");
             }
         }
+    }
+
+    // UC4: Convert Slot to Row & Column
+    public static int[] convertSlotToIndex(int slot) {
+
+        int row = (slot - 1) / 3;
+        int col = (slot - 1) % 3;
+
+        return new int[]{row, col};
     }
 }
