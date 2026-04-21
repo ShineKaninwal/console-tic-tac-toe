@@ -37,7 +37,7 @@ public class TicTacToe {
         System.out.println("First Turn: " + currentPlayer);
 
         // =========================
-        // UC3 + UC4 + UC5
+        // UC3 → UC6 Flow
         // =========================
         while (true) {
             int slot = getUserInput();
@@ -47,8 +47,14 @@ public class TicTacToe {
             int col = pos[1];
 
             if (isValidMove(board, row, col)) {
-                System.out.println("Valid Move at (" + row + ", " + col + ")");
+
+                // UC6: Place Move
+                placeMove(board, row, col, playerSymbol);
+
+                System.out.println("\nBoard after your move:");
+                printBoard(board);
                 break;
+
             } else {
                 System.out.println("Invalid Move! Try again.");
             }
@@ -65,7 +71,7 @@ public class TicTacToe {
         }
     }
 
-    // UC3: Get Input
+    // UC3: Input
     public static int getUserInput() {
         int slot;
 
@@ -81,26 +87,22 @@ public class TicTacToe {
         }
     }
 
-    // UC4: Convert Slot → Index
+    // UC4: Convert
     public static int[] convertSlotToIndex(int slot) {
         int row = (slot - 1) / 3;
         int col = (slot - 1) % 3;
         return new int[]{row, col};
     }
 
-    // UC5: Validate Move
+    // UC5: Validate
     public static boolean isValidMove(char[][] board, int row, int col) {
+        return row >= 0 && row < 3 &&
+               col >= 0 && col < 3 &&
+               board[row][col] == '-';
+    }
 
-        // Check bounds
-        if (row < 0 || row > 2 || col < 0 || col > 2) {
-            return false;
-        }
-
-        // Check if cell is empty
-        if (board[row][col] != '-') {
-            return false;
-        }
-
-        return true;
+    // UC6: Place Move
+    public static void placeMove(char[][] board, int row, int col, char symbol) {
+        board[row][col] = symbol;
     }
 }
