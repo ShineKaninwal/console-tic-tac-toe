@@ -27,19 +27,9 @@ public class TicTacToe {
         Random random = new Random();
         int toss = random.nextInt(2);
 
-        char playerSymbol;
-        char computerSymbol;
-        String currentPlayer;
-
-        if (toss == 0) {
-            playerSymbol = 'X';
-            computerSymbol = 'O';
-            currentPlayer = "Player";
-        } else {
-            playerSymbol = 'O';
-            computerSymbol = 'X';
-            currentPlayer = "Computer";
-        }
+        char playerSymbol = (toss == 0) ? 'X' : 'O';
+        char computerSymbol = (toss == 0) ? 'O' : 'X';
+        String currentPlayer = (toss == 0) ? "Player" : "Computer";
 
         System.out.println("\n--- Toss Result ---");
         System.out.println("Player Symbol: " + playerSymbol);
@@ -47,19 +37,22 @@ public class TicTacToe {
         System.out.println("First Turn: " + currentPlayer);
 
         // =========================
-        // UC3: User Input
+        // UC3 + UC4 + UC5
         // =========================
-        int slot = getUserInput();
+        while (true) {
+            int slot = getUserInput();
+            int[] pos = convertSlotToIndex(slot);
 
-        // =========================
-        // UC4: Convert Slot → Index
-        // =========================
-        int[] position = convertSlotToIndex(slot);
+            int row = pos[0];
+            int col = pos[1];
 
-        int row = position[0];
-        int col = position[1];
-
-        System.out.println("Row: " + row + ", Column: " + col);
+            if (isValidMove(board, row, col)) {
+                System.out.println("Valid Move at (" + row + ", " + col + ")");
+                break;
+            } else {
+                System.out.println("Invalid Move! Try again.");
+            }
+        }
     }
 
     // Print Board
@@ -72,7 +65,7 @@ public class TicTacToe {
         }
     }
 
-    // UC3: Get User Input
+    // UC3: Get Input
     public static int getUserInput() {
         int slot;
 
@@ -83,17 +76,31 @@ public class TicTacToe {
             if (slot >= 1 && slot <= 9) {
                 return slot;
             } else {
-                System.out.println("Invalid input! Please enter between 1 and 9.");
+                System.out.println("Invalid input! Enter 1–9.");
             }
         }
     }
 
-    // UC4: Convert Slot to Row & Column
+    // UC4: Convert Slot → Index
     public static int[] convertSlotToIndex(int slot) {
-
         int row = (slot - 1) / 3;
         int col = (slot - 1) % 3;
-
         return new int[]{row, col};
+    }
+
+    // UC5: Validate Move
+    public static boolean isValidMove(char[][] board, int row, int col) {
+
+        // Check bounds
+        if (row < 0 || row > 2 || col < 0 || col > 2) {
+            return false;
+        }
+
+        // Check if cell is empty
+        if (board[row][col] != '-') {
+            return false;
+        }
+
+        return true;
     }
 }
