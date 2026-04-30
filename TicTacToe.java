@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class TicTacToe {
 
     static Scanner sc = new Scanner(System.in);
+    static Random random = new Random();
 
     public static void main(String[] args) {
 
@@ -24,7 +25,6 @@ public class TicTacToe {
         // =========================
         // UC2: Toss Logic
         // =========================
-        Random random = new Random();
         int toss = random.nextInt(2);
 
         char playerSymbol = (toss == 0) ? 'X' : 'O';
@@ -37,28 +37,25 @@ public class TicTacToe {
         System.out.println("First Turn: " + currentPlayer);
 
         // =========================
-        // UC3 → UC6 Flow
+        // Player Move
         // =========================
-        while (true) {
-            int slot = getUserInput();
-            int[] pos = convertSlotToIndex(slot);
+        int slot = getUserInput();
+        int[] pos = convertSlotToIndex(slot);
 
-            int row = pos[0];
-            int col = pos[1];
-
-            if (isValidMove(board, row, col)) {
-
-                // UC6: Place Move
-                placeMove(board, row, col, playerSymbol);
-
-                System.out.println("\nBoard after your move:");
-                printBoard(board);
-                break;
-
-            } else {
-                System.out.println("Invalid Move! Try again.");
-            }
+        if (isValidMove(board, pos[0], pos[1])) {
+            placeMove(board, pos[0], pos[1], playerSymbol);
         }
+
+        System.out.println("\nBoard after Player move:");
+        printBoard(board);
+
+        // =========================
+        // UC7: Computer Move
+        // =========================
+        computerMove(board, computerSymbol);
+
+        System.out.println("\nBoard after Computer move:");
+        printBoard(board);
     }
 
     // Print Board
@@ -74,16 +71,11 @@ public class TicTacToe {
     // UC3: Input
     public static int getUserInput() {
         int slot;
-
         while (true) {
             System.out.print("Enter a slot (1-9): ");
             slot = sc.nextInt();
-
-            if (slot >= 1 && slot <= 9) {
-                return slot;
-            } else {
-                System.out.println("Invalid input! Enter 1–9.");
-            }
+            if (slot >= 1 && slot <= 9) return slot;
+            System.out.println("Invalid input! Enter 1–9.");
         }
     }
 
@@ -101,8 +93,28 @@ public class TicTacToe {
                board[row][col] == '-';
     }
 
-    // UC6: Place Move
+    // UC6: Place
     public static void placeMove(char[][] board, int row, int col, char symbol) {
         board[row][col] = symbol;
+    }
+
+    // UC7: Computer Random Move
+    public static void computerMove(char[][] board, char computerSymbol) {
+
+        int row, col;
+
+        while (true) {
+            int slot = random.nextInt(9) + 1; // 1–9
+            int[] pos = convertSlotToIndex(slot);
+
+            row = pos[0];
+            col = pos[1];
+
+            if (isValidMove(board, row, col)) {
+                placeMove(board, row, col, computerSymbol);
+                System.out.println("\nComputer chose slot: " + slot);
+                break;
+            }
+        }
     }
 }
